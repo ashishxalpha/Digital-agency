@@ -484,16 +484,97 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Floating shapes animation
+  // Enhanced Dynamic Floating Shapes with Scroll Response
   const floatingShapes = document.querySelectorAll(".floating-shapes .shape");
+  const particles = document.querySelectorAll(".particle-system .particle");
 
-  floatingShapes.forEach((shape) => {
-    // Random initial positions
-    const randomX = Math.random() * 100;
-    const randomY = Math.random() * 100;
+  // Initialize shape positions and properties
+  floatingShapes.forEach((shape, index) => {
+    // Set initial positions for shapes that don't have CSS positioning
+    if (!shape.style.left && !shape.style.right) {
+      const randomX = Math.random() * 80 + 10; // 10-90% range
+      const randomY = Math.random() * 80 + 10; // 10-90% range
+      shape.style.left = `${randomX}%`;
+      shape.style.top = `${randomY}%`;
+    }
+    
+    // Add scroll-responsive behavior
+    shape.setAttribute('data-scroll-factor', (Math.random() * 0.5 + 0.2).toFixed(2));
+    shape.setAttribute('data-initial-x', shape.style.left || '0%');
+    shape.setAttribute('data-initial-y', shape.style.top || '0%');
+  });
 
-    shape.style.left = `${randomX}%`;
-    shape.style.top = `${randomY}%`;
+  // Enhanced scroll-responsive animations
+  function updateDynamicElements() {
+    const scrollY = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const scrollProgress = scrollY / maxScroll;
+
+    // Update floating shapes with scroll influence
+    floatingShapes.forEach((shape) => {
+      const scrollFactor = parseFloat(shape.getAttribute('data-scroll-factor'));
+      const baseTransform = shape.style.transform || '';
+      
+      // Apply subtle scroll-based movement
+      const xOffset = Math.sin(scrollProgress * Math.PI * 2) * 20 * scrollFactor;
+      const yOffset = Math.cos(scrollProgress * Math.PI * 3) * 15 * scrollFactor;
+      const rotation = scrollProgress * 180 * scrollFactor;
+      
+      // Combine with existing animation
+      shape.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${rotation}deg)`;
+      
+      // Dynamic opacity based on scroll
+      const opacity = 0.3 + Math.abs(Math.sin(scrollProgress * Math.PI * 4)) * 0.5;
+      shape.style.opacity = opacity;
+    });
+
+    // Update particles with scroll influence
+    particles.forEach((particle, index) => {
+      const scrollFactor = (index + 1) * 0.1;
+      const xOffset = Math.sin(scrollProgress * Math.PI * 4 + index) * 30;
+      const yOffset = scrollProgress * 50 * scrollFactor;
+      
+      particle.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+      particle.style.opacity = 0.2 + Math.abs(Math.sin(scrollProgress * Math.PI * 6 + index)) * 0.6;
+    });
+  }
+
+  // Add scroll listener for dynamic elements
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    // Throttle scroll events for better performance
+    if (scrollTimeout) {
+      cancelAnimationFrame(scrollTimeout);
+    }
+    scrollTimeout = requestAnimationFrame(updateDynamicElements);
+  });
+
+  // Initialize dynamic elements
+  updateDynamicElements();
+
+  // Add mouse movement interaction for enhanced dynamism
+  document.addEventListener('mousemove', (e) => {
+    const mouseX = e.clientX / window.innerWidth;
+    const mouseY = e.clientY / window.innerHeight;
+    
+    floatingShapes.forEach((shape, index) => {
+      const influence = 0.5 + index * 0.1;
+      const xOffset = (mouseX - 0.5) * 20 * influence;
+      const yOffset = (mouseY - 0.5) * 15 * influence;
+      
+      // Apply subtle mouse influence
+      const currentTransform = shape.style.transform || '';
+      if (currentTransform.includes('translate')) {
+        // Update existing transform
+        const newTransform = currentTransform.replace(
+          /translate\([^)]+\)/,
+          `translate(${xOffset}px, ${yOffset}px)`
+        );
+        shape.style.transform = newTransform;
+      } else {
+        shape.style.transform = `translate(${xOffset}px, ${yOffset}px) ${currentTransform}`;
+      }
+    });
   });
 
   // Current date display

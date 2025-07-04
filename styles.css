@@ -320,7 +320,7 @@ p {
     60% { transform: translateY(-5px) translateX(-50%); }
 }
 
-/* ===== FLOATING SHAPES ===== */
+/* ===== DYNAMIC FLOATING SHAPES ===== */
 .floating-shapes {
     position: fixed;
     width: 100%;
@@ -334,14 +334,78 @@ p {
 
 .shape {
     position: absolute;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(108, 99, 255, 0.05);
     animation: float 15s infinite linear;
+    will-change: transform;
 }
 
-.shape:nth-child(1) {
+/* Circle shapes */
+.shape.circle {
+    border-radius: 50%;
+    background: rgba(108, 99, 255, 0.05);
+}
+
+/* Triangle shapes */
+.shape.triangle {
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 43px solid rgba(255, 101, 132, 0.08);
+    background: transparent;
+}
+
+/* Square shapes */
+.shape.square {
+    background: rgba(76, 175, 80, 0.06);
+    border-radius: 8px;
+}
+
+/* Hexagon shapes */
+.shape.hexagon {
+    width: 50px;
+    height: 28px;
+    background: rgba(255, 193, 7, 0.07);
+    position: relative;
+}
+
+.shape.hexagon:before,
+.shape.hexagon:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+}
+
+.shape.hexagon:before {
+    bottom: 100%;
+    border-bottom: 14px solid rgba(255, 193, 7, 0.07);
+}
+
+.shape.hexagon:after {
+    top: 100%;
+    border-top: 14px solid rgba(255, 193, 7, 0.07);
+}
+
+/* Pentagon shapes */
+.shape.pentagon {
+    width: 50px;
+    height: 36px;
+    background: rgba(156, 39, 176, 0.06);
+    position: relative;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+/* Diamond shapes */
+.shape.diamond {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 188, 212, 0.07);
+    transform: rotate(45deg);
+}
+
+/* Individual shape positioning and sizes */
+.shape.circle:nth-child(1) {
     width: 70px;
     height: 70px;
     top: 10%;
@@ -350,7 +414,7 @@ p {
     background: rgba(108, 99, 255, 0.05);
 }
 
-.shape:nth-child(2) {
+.shape.circle:nth-child(2) {
     width: 100px;
     height: 100px;
     top: 20%;
@@ -360,7 +424,7 @@ p {
     background: rgba(255, 101, 132, 0.05);
 }
 
-.shape:nth-child(3) {
+.shape.circle:nth-child(3) {
     width: 60px;
     height: 60px;
     bottom: 30%;
@@ -370,46 +434,175 @@ p {
     background: rgba(76, 175, 80, 0.05);
 }
 
-.shape:nth-child(4) {
-    width: 120px;
-    height: 120px;
-    bottom: 20%;
-    right: 5%;
-    animation-duration: 27s;
-    animation-delay: 1s;
-    background: rgba(108, 99, 255, 0.05);
-}
-
-.shape:nth-child(5) {
-    width: 80px;
-    height: 80px;
-    top: 60%;
-    left: 50%;
+.shape.triangle:nth-child(4) {
+    top: 15%;
+    left: 80%;
     animation-duration: 22s;
-    animation-delay: 3s;
-    background: rgba(255, 101, 132, 0.05);
+    animation-delay: 1s;
 }
 
+.shape.triangle:nth-child(5) {
+    bottom: 40%;
+    right: 20%;
+    animation-duration: 28s;
+    animation-delay: 3s;
+}
+
+.shape.square:nth-child(6) {
+    width: 45px;
+    height: 45px;
+    top: 50%;
+    left: 10%;
+    animation-duration: 24s;
+    animation-delay: 0.5s;
+}
+
+.shape.square:nth-child(7) {
+    width: 35px;
+    height: 35px;
+    top: 70%;
+    right: 15%;
+    animation-duration: 32s;
+    animation-delay: 2.5s;
+}
+
+.shape.hexagon:nth-child(8) {
+    top: 35%;
+    right: 5%;
+    animation-duration: 26s;
+    animation-delay: 1.5s;
+}
+
+.shape.pentagon:nth-child(9) {
+    bottom: 15%;
+    left: 40%;
+    animation-duration: 29s;
+    animation-delay: 4.5s;
+}
+
+.shape.diamond:nth-child(10) {
+    top: 25%;
+    left: 30%;
+    animation-duration: 21s;
+    animation-delay: 0.8s;
+}
+
+/* Enhanced floating animation with scroll influence */
 @keyframes float {
     0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.5;
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.3;
     }
     25% {
-        transform: translateY(-20px) rotate(90deg);
-        opacity: 0.75;
+        transform: translateY(-30px) rotate(90deg) scale(1.1);
+        opacity: 0.6;
     }
     50% {
-        transform: translateY(0) rotate(180deg);
-        opacity: 1;
+        transform: translateY(-10px) rotate(180deg) scale(0.9);
+        opacity: 0.8;
     }
     75% {
-        transform: translateY(20px) rotate(270deg);
-        opacity: 0.75;
+        transform: translateY(25px) rotate(270deg) scale(1.05);
+        opacity: 0.5;
     }
     100% {
-        transform: translateY(0) rotate(360deg);
-        opacity: 0.5;
+        transform: translateY(0) rotate(360deg) scale(1);
+        opacity: 0.3;
+    }
+}
+
+/* ===== PARTICLE SYSTEM ===== */
+.particle-system {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: particleFloat 8s infinite ease-in-out;
+}
+
+.particle:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 8s;
+}
+
+.particle:nth-child(2) {
+    left: 20%;
+    animation-delay: 1s;
+    animation-duration: 9s;
+}
+
+.particle:nth-child(3) {
+    left: 30%;
+    animation-delay: 2s;
+    animation-duration: 7s;
+}
+
+.particle:nth-child(4) {
+    left: 40%;
+    animation-delay: 0.5s;
+    animation-duration: 10s;
+}
+
+.particle:nth-child(5) {
+    left: 50%;
+    animation-delay: 1.5s;
+    animation-duration: 8.5s;
+}
+
+.particle:nth-child(6) {
+    left: 60%;
+    animation-delay: 2.5s;
+    animation-duration: 9.5s;
+}
+
+.particle:nth-child(7) {
+    left: 70%;
+    animation-delay: 3s;
+    animation-duration: 7.5s;
+}
+
+.particle:nth-child(8) {
+    left: 80%;
+    animation-delay: 0.8s;
+    animation-duration: 8.8s;
+}
+
+@keyframes particleFloat {
+    0% {
+        top: 100%;
+        opacity: 0;
+        transform: translateX(0) scale(0.5);
+    }
+    10% {
+        opacity: 0.6;
+        transform: translateX(10px) scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateX(-15px) scale(1.2);
+    }
+    90% {
+        opacity: 0.4;
+        transform: translateX(5px) scale(0.8);
+    }
+    100% {
+        top: -10%;
+        opacity: 0;
+        transform: translateX(0) scale(0.5);
     }
 }
 
