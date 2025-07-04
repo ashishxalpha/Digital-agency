@@ -29,6 +29,7 @@
     /* Transitions */
     --transition-fast: 0.3s ease;
     --transition-normal: 0.5s ease;
+    --transition-slow: 0.8s ease;
     
     /* Border Radius */
     --radius-small: 4px;
@@ -99,6 +100,12 @@ section {
 
 .accent {
     color: var(--primary);
+    text-shadow: 0 0 10px rgba(108, 99, 255, 0.3);
+    transition: text-shadow var(--transition-fast);
+}
+
+.accent:hover {
+    text-shadow: 0 0 20px rgba(108, 99, 255, 0.5);
 }
 
 /* ===== PROGRESS BAR ===== */
@@ -107,10 +114,11 @@ section {
     top: 0;
     left: 0;
     height: 4px;
-    background: var(--primary);
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
     width: 0%;
     z-index: 1001;
     transition: width 0.2s ease;
+    box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
 }
 
 /* ===== PARALLAX STYLES ===== */
@@ -1808,5 +1816,20 @@ footer {
         text-align: center;
         margin-right: 0;
         width: 100%;
+    }
+    
+    /* Optimize dynamic elements for mobile */
+    .floating-shapes .shape {
+        animation-duration: 10s !important;
+    }
+    
+    .floating-shapes .shape.triangle,
+    .floating-shapes .shape.hexagon,
+    .floating-shapes .shape.pentagon {
+        transform: scale(0.7);
+    }
+    
+    .particle-system .particle {
+        animation-duration: 6s !important;
     }
 }
